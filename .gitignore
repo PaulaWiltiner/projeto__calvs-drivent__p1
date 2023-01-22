@@ -4,5 +4,5 @@ node_modules
 !.env.example
 yarn.lock
 .vscode
-!.env.development
-!.env.test
+.env.development
+.env.test
