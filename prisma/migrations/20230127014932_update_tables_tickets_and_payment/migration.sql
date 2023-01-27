@@ -1,3 +1,6 @@
+-- CreateEnum
+CREATE TYPE "TicketStatus" AS ENUM ('RESERVED', 'PAID');
+
 -- CreateTable
 CREATE TABLE "TicketType" (
     "id" SERIAL NOT NULL,
@@ -16,7 +19,7 @@ CREATE TABLE "Ticket" (
     "id" SERIAL NOT NULL,
     "ticketTypeId" INTEGER NOT NULL,
     "enrollmentId" INTEGER NOT NULL,
-    "status" VARCHAR(255) NOT NULL,
+    "status" "TicketStatus" NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -28,8 +31,8 @@ CREATE TABLE "Payment" (
     "id" SERIAL NOT NULL,
     "ticketId" INTEGER NOT NULL,
     "value" INTEGER NOT NULL,
-    "cardIssuer" VARCHAR(255) NOT NULL,
-    "cardLastDigits" VARCHAR(255) NOT NULL,
+    "cardIssuer" TEXT NOT NULL,
+    "cardLastDigits" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 

@@ -15,6 +15,7 @@ async function main() {
       },
     });
   }
+
   let eventTicketType = await prisma.ticketType.findFirst();
   if (!eventTicketType) {
     await prisma.ticketType.create({
@@ -26,7 +27,6 @@ async function main() {
       },
     });
   }
-
   console.log({ event });
 }
 

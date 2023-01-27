@@ -80,7 +80,7 @@ describe("GET /enrollments", () => {
 
 describe("GET /enrollments/cep", () => {
   it("should respond with status 200 when CEP is valid", async () => {
-    const response = await server.get("/enrollments/cep?cep=04538-132");
+    const response = await server.get("/enrollments/cep?cep=04538132");
     const address = createhAddressWithCEP();
 
     expect(response.status).toBe(httpStatus.OK);
@@ -194,7 +194,7 @@ describe("POST /enrollments", () => {
         birthday: faker.date.past().toISOString(),
         phone: "(21) 98999-9999",
         address: {
-          cep: "00000",
+          cep: "0",
           street: faker.address.streetName(),
           city: faker.address.city(),
           number: faker.datatype.number().toString(),
