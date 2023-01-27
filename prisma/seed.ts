@@ -15,6 +15,17 @@ async function main() {
       },
     });
   }
+  let eventTicketType = await prisma.ticketType.findFirst();
+  if (!eventTicketType) {
+    await prisma.ticketType.create({
+      data: {
+        name: "Palestra X",
+        price: 400,
+        isRemote: true,
+        includesHotel: false
+      },
+    });
+  }
 
   console.log({ event });
 }
