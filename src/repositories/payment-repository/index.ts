@@ -1,5 +1,5 @@
 import { prisma } from "@/config";
-import { Payment, Prisma } from "@prisma/client";
+import { Payment } from "@prisma/client";
 
 export type dataPayment= {
   ticketId: number,
@@ -12,27 +12,27 @@ export type dataPayment= {
 	}
 }
 
-// async function create(data: dataPayment) {
-//   return prisma.payment.create({
-//     data:{
-//       ticketId: data.ticketId,
-//       value: data.cardData.number,
-//       cardIssuer: data.cardData.issuer, // VISA | MASTERCARD
-//       cardLastDigits: data.cardData.cardLastDigits,
-//     }
-//   });
-// }
+async function create(data: Omit<Payment, "id" | "createdAt" | "updatedAt">) {
+  return prisma.payment.create({
+    data
+  });
+}
 
-async function getAllPayment(ticketId: number): Promise<Payment> {
-  return prisma.payment.findFirst({
+async function getAllPayment(ticketId: number, userId: number ): Promise<Payment[]> {
+  return prisma.payment.findMany({
     where: {
       ticketId,
+      Ticket: {
+        Enrollment: {
+          userId
+        }
+      }
     }
   });
 }
 
 const paymentRepository = {
-  // create,
+  create,
   getAllPayment
 };
 

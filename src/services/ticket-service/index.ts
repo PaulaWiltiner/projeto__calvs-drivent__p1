@@ -18,15 +18,15 @@ async function getAllTicket(userId: number): Promise<Ticket[]> {
 }
 
 async function getTicketById(ticketId: number) {
-  const event = await ticketRepository.getOneTicket(ticketId);
+  const event = await ticketRepository.getOneTicket(ticketId,);
   if (!event) throw { code: "404" };
+
+  return event;
 }
 
-async function getTicketByIdandUser(ticketId: number, userId: number) {
-  const enrollmentId= await enrollmentsService.getOneEnrollment(userId);
-  if (!enrollmentId) throw { code: "401" };
-  const event = await ticketRepository.getOneTicket(ticketId);
-  if (event.enrollmentId!==enrollmentId) throw { code: "401" };
+async function getTicketWithUser(ticketId: number, userId: number) {
+  const event = await ticketRepository.getTicketWithUser(ticketId, userId);
+  if (!event) throw { code: "401" };
 }
 
 async function createTicket(ticketTypeId: number, userId: number) {
@@ -41,12 +41,17 @@ async function createTicket(ticketTypeId: number, userId: number) {
   return event;
 }
 
+async function updateTicket(ticketId: number) {
+  await ticketRepository.updateTicketId(ticketId);
+}
+
 const eventsService = {
   getAllTicketType,
   getAllTicket,
   createTicket,
   getTicketById,
-  getTicketByIdandUser
+  getTicketWithUser,
+  updateTicket
 };
 
 export default eventsService;

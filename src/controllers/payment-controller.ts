@@ -3,19 +3,20 @@ import paymentService from "@/services/payment-service";
 import { Response } from "express";
 import httpStatus from "http-status";
 
-// export async function createPayment(req: AuthenticatedRequest, res: Response) {
-//   const { userId } = req;
-//   const data = req.body;
-//   if(!data.cardData || !data.ticketId)return res.sendStatus(httpStatus.BAD_REQUEST);
+export async function createPayment(req: AuthenticatedRequest, res: Response) {
+  const { userId } = req;
+  const data = req.body;
+  if(!data.cardData || !data.ticketId) return res.sendStatus(httpStatus.BAD_REQUEST);
 
-//   try {
-//     const payment = await paymentService.createPayment(data, userId);
+  try {
+    const payment = await paymentService.createPayment(data, userId);
 
-//     return res.status(httpStatus.CREATED).send(payment);
-//   } catch (error) {
-//     return res.sendStatus(httpStatus.NOT_FOUND);
-//   }
-// }
+    return res.status(httpStatus.OK).send(payment);
+  } catch (error) {
+    if(error.code==="404") return res.sendStatus(httpStatus.NOT_FOUND);
+    if(error.code==="401") return res.sendStatus(httpStatus.UNAUTHORIZED);
+  }
+}
 
 export async function getAllPayment(req: AuthenticatedRequest, res: Response) {
   const { userId } = req;
@@ -23,6 +24,7 @@ export async function getAllPayment(req: AuthenticatedRequest, res: Response) {
   if(ticketId===undefined) res.sendStatus(httpStatus.BAD_REQUEST);
   try {
     const event = await paymentService.getAllPayment(Number(ticketId), userId);
+    if(event.length===1) res.status(httpStatus.OK).send(event[0]);
     return res.status(httpStatus.OK).send(event);
   } catch (error) {
     if(error.code==="404") return res.sendStatus(httpStatus.NOT_FOUND);
