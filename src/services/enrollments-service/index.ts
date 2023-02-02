@@ -1,4 +1,3 @@
-
 import { AddressEnrollment } from "@/protocols";
 import { getAddress } from "@/utils/cep-service";
 import { notFoundError } from "@/errors";
@@ -60,7 +59,6 @@ type GetAddressResult = Omit<Address, "createdAt" | "updatedAt" | "enrollmentId"
 async function createOrUpdateEnrollmentWithAddress(params: CreateOrUpdateEnrollmentWithAddress) {
   const enrollment = exclude(params, "address");
   const address = getAddressForUpsert(params.address);
-
   const result = await getAddressFromCEP(address.cep);
 
   if (result.error) {
@@ -79,11 +77,6 @@ function getAddressForUpsert(address: CreateAddressParams) {
   };
 }
 
-async function getOneEnrollment(userId: number) {
-  const event = await enrollmentRepository.findByUserId(userId);
-  return event.id;
-}
-
 export type CreateOrUpdateEnrollmentWithAddress = CreateEnrollmentParams & {
   address: CreateAddressParams;
 };
@@ -91,7 +84,6 @@ export type CreateOrUpdateEnrollmentWithAddress = CreateEnrollmentParams & {
 const enrollmentsService = {
   getOneWithAddressByUserId,
   createOrUpdateEnrollmentWithAddress,
-  getOneEnrollment,
   getAddressFromCEP
 };
 
