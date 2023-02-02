@@ -1,39 +1,28 @@
 import { prisma } from "@/config";
 import { Payment } from "@prisma/client";
 
-export type dataPayment= {
-  ticketId: number,
-	cardData: {
-		issuer: string,
-    number: number,
-    name: string,
-    expirationDate: Date,
-    cvv: number
-	}
-}
-
-async function create(data: Omit<Payment, "id" | "createdAt" | "updatedAt">) {
-  return prisma.payment.create({
-    data
-  });
-}
-
-async function getAllPayment(ticketId: number, userId: number ): Promise<Payment[]> {
-  return prisma.payment.findMany({
+async function findPaymentByTicketId(ticketId: number) {
+  return prisma.payment.findFirst({
     where: {
       ticketId,
-      Ticket: {
-        Enrollment: {
-          userId
-        }
-      }
     }
   });
 }
 
+async function createPayment(ticketId: number, params: PaymentParams) {
+  return prisma.payment.create({
+    data: {
+      ticketId,
+      ...params,
+    }
+  });
+}
+
+export type PaymentParams = Omit<Payment, "id" | "createdAt" | "updatedAt">
+
 const paymentRepository = {
-  create,
-  getAllPayment
+  findPaymentByTicketId,
+  createPayment,
 };
 
 export default paymentRepository;
